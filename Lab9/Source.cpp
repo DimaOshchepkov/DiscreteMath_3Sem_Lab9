@@ -45,6 +45,7 @@ std::vector<std::list<int>> ReadFile(std::string name)
 std::vector<std::list<int>> CountConnectivityComponent(std::vector<std::list<int>> graph)
 {
 	std::vector<bool> visited(graph.size(), false);
+	std::vector<int> parent(graph.size(), -1);
 	std::list<int> q;
 
 	std::vector<std::list<int>> components;
@@ -53,19 +54,32 @@ std::vector<std::list<int>> CountConnectivityComponent(std::vector<std::list<int
 	{
 		if (!visited[i])
 		{
-			components.push_back({ i });
-			q.push_back(i);
+			parent[i] = -1;
+			q.push_front(i);
 			visited[i] = true;
 			while (q.size() != 0)
 			{
-				int front = q.back();
-				q.pop_back();
+				int front = q.front();
+				q.pop_front();
 				for (int top : graph[front]) {
 					if (!visited[top])
 					{
-						q.push_back(top);
-						components.back().push_back(top);
+						parent[top] = front;
+						q.push_front(top);
+						
 						visited[top] = true;
+					}
+					else if(parent[front] != top)
+					{
+						visited[top] = true;
+						components.push_back({ });
+						int sup = front;
+						while (parent[sup] != top)
+						{
+							components.back().push_back(sup);
+							sup = parent[sup];
+						}
+						components.push_back({ top });
 					}
 				}
 			}
@@ -125,4 +139,12 @@ std::vector<std::list<int>> ShotestDistance(std::vector<std::list<int>> graph, i
 
 
 	return distances;
+}
+
+
+
+void PrintGraph(std::vector<std::list<int>> graph)
+{
+	for (int i = 0; i < graph.size(); i++)
+		std::cout << i << ": " << graph[i];
 }

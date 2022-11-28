@@ -3,9 +3,11 @@
 
 #include <iostream>
 
+#include "Header.h"
+
 int main()
-{
-    /*std::cout << "Create file?(yes\\no)\n";
+{/*
+    std::cout << "Create file?(yes\\no)\n";
     std::string ans;
     std::cin >> ans;
     if (ans == "yes")
@@ -14,10 +16,7 @@ int main()
 
     auto graph = ReadFile();
 
-    //PrintGraph(CountConnectivityComponent(graph));
-
-    PrintGraph(ShotestDistance(graph, 4));
-
+    PrintGraph(CountConnectivityComponent(graph));
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
