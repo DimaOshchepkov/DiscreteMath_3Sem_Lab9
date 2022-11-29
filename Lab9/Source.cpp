@@ -41,52 +41,39 @@ std::vector<std::list<int>> ReadFile(std::string name)
 	return graph;
 }
 
-
-std::vector<std::list<int>> CountConnectivityComponent(std::vector<std::list<int>> graph)
+void _Circle(const std::vector<std::list<int>>& graph, std::vector<bool>& open, std::vector<bool>& visited, std::vector<int>& parent, int top, std::list<int>& ans)
 {
-	std::vector<bool> visited(graph.size(), false);
-	std::vector<int> parent(graph.size(), -1);
-	std::list<int> q;
-
-	std::vector<std::list<int>> components;
-	int count = 0;
-	for (int i = 0; i < graph.size(); i++)
+	open[top] = true;
+	for (int t : graph[top])
 	{
-		if (!visited[i])
+		if (!open[t])
 		{
-			parent[i] = -1;
-			q.push_front(i);
-			visited[i] = true;
-			while (q.size() != 0)
+			parent[t] = top;
+			_Circle(graph, open, visited, parent, t);
+		}
+		else if (parent[top] != t)
+		{
+			int sup = top;
+			while (sup != t)
 			{
-				int front = q.front();
-				q.pop_front();
-				for (int top : graph[front]) {
-					if (!visited[top])
-					{
-						parent[top] = front;
-						q.push_front(top);
-						
-						visited[top] = true;
-					}
-					else if(parent[front] != top)
-					{
-						visited[top] = true;
-						components.push_back({ });
-						int sup = front;
-						while (parent[sup] != top)
-						{
-							components.back().push_back(sup);
-							sup = parent[sup];
-						}
-						components.push_back({ top });
-					}
-				}
+				ans.push_back(sup);
+				sup = parent[sup];
 			}
+			ans.push_back(t);
 		}
 	}
+	visited[top] = true;
+}
 
-	return components;
+std::list<int> Circle(const std::vector<std::list<int>>& graph, int top)
+{
+	std::vector<bool> visited(graph.size(), false);
+	std::vector<bool> open(graph.size(), false);
+	std::vector<int> parent(graph.size(), -1);
+	std::list<int> ans;
+	
+	_Circle(graph, visited, parent, top, ans);
+	return ans;
 }
 
 void PrintDistance(std::vector<int> distances, int top)
