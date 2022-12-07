@@ -27,3 +27,5 @@ std::ostream& operator<<(std::ostream& os, const std::list<T>& list)
 
 void PrintGraph(std::vector<std::list<int>> graph);
 
+std::list<int> Circle(const std::vector<std::list<int>>& graph);
+

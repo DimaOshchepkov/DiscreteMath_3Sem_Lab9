@@ -5,18 +5,16 @@
 
 #include "Header.h"
 
+
 int main()
-{/*
-    std::cout << "Create file?(yes\\no)\n";
-    std::string ans;
-    std::cin >> ans;
-    if (ans == "yes")
-        CreateFile();*/
+{
+    
+    //CreateFile();
 
 
     auto graph = ReadFile();
 
-    PrintGraph(CountConnectivityComponent(graph));
+    std::cout << Circle(graph);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

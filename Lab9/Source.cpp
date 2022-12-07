@@ -43,15 +43,16 @@ std::vector<std::list<int>> ReadFile(std::string name)
 
 void _Circle(const std::vector<std::list<int>>& graph, std::vector<bool>& open, std::vector<bool>& visited, std::vector<int>& parent, int top, std::list<int>& ans)
 {
+
 	open[top] = true;
 	for (int t : graph[top])
 	{
 		if (!open[t])
 		{
 			parent[t] = top;
-			_Circle(graph, open, visited, parent, t);
+			_Circle(graph, open, visited, parent, t, ans);
 		}
-		else if (parent[top] != t)
+		else if (parent[top] != t && ans.empty())
 		{
 			int sup = top;
 			while (sup != t)
@@ -59,20 +60,29 @@ void _Circle(const std::vector<std::list<int>>& graph, std::vector<bool>& open, 
 				ans.push_back(sup);
 				sup = parent[sup];
 			}
-			ans.push_back(t);
+			ans.push_back(sup);
+			return;
 		}
 	}
 	visited[top] = true;
+
 }
 
-std::list<int> Circle(const std::vector<std::list<int>>& graph, int top)
+std::list<int> Circle(const std::vector<std::list<int>>& graph)
 {
 	std::vector<bool> visited(graph.size(), false);
 	std::vector<bool> open(graph.size(), false);
 	std::vector<int> parent(graph.size(), -1);
 	std::list<int> ans;
 	
-	_Circle(graph, visited, parent, top, ans);
+	for (int i = 0; i < graph.size(); i++)
+	{
+		_Circle(graph, open, visited, parent, i, ans);
+		if (ans.size() != 0)
+			return ans;
+		open.assign(open.size(), false);
+		visited.assign(visited.size(), false);
+	}
 	return ans;
 }
 
